@@ -1,4 +1,5 @@
 ﻿using Aimtec;
+using System.Drawing;
 using System.Linq;
 using Aimtec.SDK.Menu;
 using Aimtec.SDK.Util;
@@ -8,7 +9,7 @@ using Spell = Aimtec.SDK.Spell;
 using Aimtec.SDK.TargetSelector;
 using Aimtec.SDK.Menu.Components;
 using Aimtec.SDK.Prediction.Skillshots;
-using System.Drawing;
+
 
 namespace emicoviBlitzcrank
 {
@@ -71,11 +72,11 @@ namespace emicoviBlitzcrank
             Main.Attach();
 
             Game.OnUpdate += Game_OnUpdate;
-            Render.OnPresent += Drawings;
+            //Render.OnPresent += Drawings;
         }
 
         /*Drawings*/
-        private static void Drawings()
+        /* private static void Drawings()
         {
 
             if (Main["drawings"]["q"].As<MenuBool>().Enabled)
@@ -91,6 +92,7 @@ namespace emicoviBlitzcrank
                 Render.Circle(Blitzcrank.Position, _r.Range, 180, Color.Green);
             }
         }
+        */
 
         private static void Game_OnUpdate()
         {
