@@ -33,13 +33,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Aimtec">
-      <HintPath>..\..\..\..\..\AppData\Local\AimtecLoader\Data\System\Aimtec.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\AppData\Local\AimtecLoader\Data\System\Aimtec.dll</HintPath>
     </Reference>
     <Reference Include="Aimtec.SDK">
-      <HintPath>..\..\..\..\..\AppData\Local\AimtecLoader\Data\System\Aimtec.SDK.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\AppData\Local\AimtecLoader\Data\System\Aimtec.SDK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
