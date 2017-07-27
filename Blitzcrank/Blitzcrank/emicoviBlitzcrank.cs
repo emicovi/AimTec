@@ -152,7 +152,7 @@ namespace emicoviBlitzcrank
             if (target == null) return;
             var prediction = _q.GetPrediction(target);
 
-            if (Main["combo"]["q"].As<MenuBool>().Enabled && Main["whiteList"]["qWhiteList" + target.ChampionName.ToLower()].As<MenuBool>().Enabled && target.IsInRange(_q.Range) && target.IsValidTarget() && !target.HasBuff("threshQ") && _q.Ready)
+            if (Main["combo"]["q"].As<MenuBool>().Enabled && Main["whiteList"]["qWhiteList" + target.ChampionName.ToLower()].As<MenuBool>().Enabled && target.IsInRange(_q.Range) && target.IsValidTarget() && _q.Ready)
             {
                 if (prediction.HitChance >= HitChance.High && target.Distance(Blitzcrank.ServerPosition) > 400)
                 {
