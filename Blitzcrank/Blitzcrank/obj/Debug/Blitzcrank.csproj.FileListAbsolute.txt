@@ -1,1 +1,2 @@
 C:\Users\emico\documents\visual studio 2017\Projects\Blitzcrank\Blitzcrank\obj\Debug\Blitzcrank.csprojResolveAssemblyReference.cache
+C:\Users\emico\Desktop\aimtec emicovi\AimTec\AimTec\Blitzcrank\Blitzcrank\obj\Debug\Blitzcrank.csprojResolveAssemblyReference.cache
