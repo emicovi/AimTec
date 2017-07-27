@@ -9,6 +9,7 @@ using Aimtec.SDK.TargetSelector;
 using Aimtec.SDK.Menu.Components;
 using Aimtec.SDK.Prediction.Skillshots;
 using System.Drawing;
+using Aimtec.SDK.Damage;
 
 namespace emicoviBlitzcrank
 {
@@ -17,21 +18,19 @@ namespace emicoviBlitzcrank
         public static Menu Main = new Menu("Index", "emicovi Blitzcrank", true);
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Blitzcrank => ObjectManager.GetLocalPlayer();
-        //private static Spell _q, _e, _r;
+        private static Spell _q, _e, _r;
 
         public emicoviBlitzcrank()
-        {
-            /*
-            
-            
+        {          
             _q = new Spell(SpellSlot.Q, 925f);
             _e = new Spell(SpellSlot.E);
             _r = new Spell(SpellSlot.R, 600);
 
-            _q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.Line);
-            _r.SetSkillshot(0.25f, 600f, float.MaxValue, false, SkillshotType.Circle);
-        
-            */
+           _q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.Line, false,
+                HitChance.VeryHigh);
+            _r.SetSkillshot(0.25f, 600f, float.MaxValue, false, SkillshotType.Circle, false,
+                HitChance.VeryHigh);
+       
 
 
             Orbwalker.Attach(Main);
@@ -56,14 +55,25 @@ namespace emicoviBlitzcrank
 
 
             /*Harass Menu*/
-            /*var harass = new Menu("harass", "Harass")
+            var harass = new Menu("harass", "Harass")
             {
                 new MenuBool("autoHarass", "Auto Harass", false),
                 new MenuSliderBool("q", "Use Q / if Mana >= x%", true, 100, 0, 300),
                 new MenuSliderBool("e", "Use E / if Mana >= x%", true, 100, 0, 300),
             };
+
             Main.Add(harass);
-            */
+
+
+            var jungleclear = new Menu("jungleclear", "Jungle Clear")
+            {
+                new MenuSliderBool("q", "Use Q / if Mana >= x%", true, 30, 0, 99),
+                new MenuSliderBool("e", "Use E / if Mana >= x%", true, 30, 0, 99),
+                new MenuKeyBind("jungSteal", "Baron - Dragon - RiftHerald Steal, R Key:", KeyCode.S, KeybindType.Toggle)
+            };
+            Main.Add(jungleclear);
+
+
 
             /*Drawings Menu*/
             var drawings = new Menu("drawings", "Drawings")
@@ -85,15 +95,15 @@ namespace emicoviBlitzcrank
 
             if (Main["drawings"]["q"].As<MenuBool>().Enabled)
             {
-                Render.Circle(Blitzcrank.Position, SpellManager.Get(SpellSlot.Q).Range, 180, Color.Green);
+                Render.Circle(Blitzcrank.Position, _q.Range , 180, Color.Green);
             }
             if (Main["drawings"]["e"].As<MenuBool>().Enabled)
             {
-                Render.Circle(Blitzcrank.Position, SpellManager.Get(SpellSlot.E).Range, 180, Color.Green);
+                Render.Circle(Blitzcrank.Position, _e.Range, 180, Color.Green);
             }
             if (Main["drawings"]["r"].As<MenuBool>().Enabled)
             {
-                Render.Circle(Blitzcrank.Position, SpellManager.Get(SpellSlot.R).Range, 180, Color.Green);
+                Render.Circle(Blitzcrank.Position, _r.Range, 180, Color.Green);
             }
         }
 
@@ -106,44 +116,37 @@ namespace emicoviBlitzcrank
                     Combo();
                     break;
             }
-            //if (Main["harass"]["autoHarass"].As<MenuBool>().Enabled)
-           // {
-                //BlitzQ();
-                //BlitzE();
-           // }
+            if (Main["harass"]["autoHarass"].As<MenuBool>().Enabled)
+           {
+                BlitzQ();
+                BlitzE();
+           }
+
+           if (Main["jungleclear"]["jungSteal"].As<MenuKeyBind>().Enabled && _r.Ready)
+           {
+                foreach (var jungSteal in ObjectManager.Get<Obj_AI_Minion>().Where(m => m.IsValidTarget(_r.Range) && Blitzcrank.GetSpellDamage(m, SpellSlot.Q) >= m.Health))
+                {
+                    if (jungSteal.UnitSkinName.StartsWith("SRU_Dragon") || jungSteal.UnitSkinName.StartsWith("SRU_Baron") || jungSteal.UnitSkinName.StartsWith("SRU_RiftHerald"))
+                    {
+                        _q.Cast(jungSteal);
+                    }
+
+                }
+            }
+
         }
 
         /*Combo*/
         private static void Combo()
         {
-            var target = TargetSelector.GetTarget(SpellManager.Get(SpellSlot.Q).Range);
-
-            if (Main["combo"]["q"].As<MenuBool>().Enabled &&
-                Main["whiteList"]["qWhiteList" + target.ChampionName.ToLower()].As<MenuBool>().Enabled &&
-                target.IsInRange(SpellManager.Get(SpellSlot.Q).Range) && target.IsValidTarget() &&
-                SpellManager.Get(SpellSlot.Q).Ready)
-            {
-                SpellManager.Get(SpellSlot.Q).CastMob();
-            }
-
-            if (Main["combo"]["e"].As<MenuBool>().Enabled && target.IsValidTarget() &&
-                SpellManager.Get(SpellSlot.E).Ready)
-            {
-                SpellManager.Get(SpellSlot.E).CastMob();
-            }
-
-            if (Main["combo"]["r"].As<MenuBool>().Enabled && Blitzcrank.CountEnemyHeroesInRange(SpellManager.Get(SpellSlot.R).Range - 50) >=
-                Main["combo"]["r"].As<MenuSliderBool>().Value)
-            {
-                SpellManager.Get(SpellSlot.R).CastMob();
-            }
-
-            //BlitzQ();
-            //BlitzE();
-            //BlitzR();
+            
+            BlitzQ();
+            BlitzE();
+            BlitzR();
         }
 
-        /*private static void BlitzQ()
+
+        private static void BlitzQ()
         {
             var target = TargetSelector.GetTarget(_q.Range);
 
@@ -178,7 +181,7 @@ namespace emicoviBlitzcrank
                 _r.Cast();
             }
         }
-    */
+    
 
     }
 }
