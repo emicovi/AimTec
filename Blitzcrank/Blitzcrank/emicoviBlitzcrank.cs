@@ -67,8 +67,7 @@ namespace emicoviBlitzcrank
 
             var jungleclear = new Menu("jungleclear", "Jungle Clear")
             {
-                new MenuSliderBool("q", "Use Q / if Mana >= x%", true, 30, 0, 99),
-                new MenuSliderBool("e", "Use E / if Mana >= x%", true, 30, 0, 99),
+                
                 new MenuKeyBind("jungSteal", "Baron - Dragon - RiftHerald Steal, Q Key:", KeyCode.S, KeybindType.Toggle)
             };
             Main.Add(jungleclear);
