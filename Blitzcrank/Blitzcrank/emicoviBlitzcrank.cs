@@ -22,8 +22,8 @@ namespace emicoviBlitzcrank
 
         public emicoviBlitzcrank()
         {          
-            _q = new Spell(SpellSlot.Q, 925f);
-            _e = new Spell(SpellSlot.E);
+            _q = new Spell(SpellSlot.Q, 925);
+            _e = new Spell(SpellSlot.E, 125);
             _r = new Spell(SpellSlot.R, 600);
 
            _q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.Line, false,
